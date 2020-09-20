@@ -14,11 +14,10 @@ const server = http.createServer(app);
 const io = socketio(server);
 
 io.on('connection', (sock) => {
-    console.log('Someone connected');
-    sock.emit('message', 'Hi, you are connected');
-
-    sock.on('message', (text) => {
-        io.emit('message', text);
+    sock.join('players');
+    
+    sock.on('connected', (payload) => {
+        io.to('players').emit('joined', payload);
     });
 });
 
@@ -26,6 +25,6 @@ server.on('error', () => {
     console.error('Server error: ', err);
 });
 
-server.listen(3000, ()=> {
-    console.log('Idle Game started on 8080');
+server.listen(9898, ()=> {
+    console.log('Idle Game started on 9898');
 });

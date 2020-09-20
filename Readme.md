@@ -1,9 +1,8 @@
 How to run server/Client
 Server:
-
+1. npm install
+2. npm run dev
 Client:
-
-1. cd IdleGame/server
-2. npm run dev(in cmd)
-3. open localhost:8080
-waow, you're connected!
+1. npm install
+2. npm run start
+3. http://localhost:1234

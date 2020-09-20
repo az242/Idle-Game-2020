@@ -1,7 +1,8 @@
 How to run server/Client  
-  Server:  
+>Server:  
 >1. npm install
->2. npm run dev  
+>2. npm run dev
+
 Client:  
 >1. npm install
 >2. npm run start

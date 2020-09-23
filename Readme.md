@@ -13,5 +13,3 @@ Client:
 >3. npm run start  
 >4. http://localhost:1234  
 
-
-You need to port forward some

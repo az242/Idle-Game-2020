@@ -2,11 +2,18 @@
 <html lang="en">
     <head>
         <title>Idle Game</title>
+        <script>
+            let ip = '74.90.215.202';
+            let port = '9898';
+            let dynamicScript = document.createElement("script");
+            dynamicScript.setAttribute("src", "http://" + ip + ":" + port + "/socket.io/socket.io.js");
+            dynamicScript.setAttribute("async", "false");
+            document.head.insertBefore(dynamicScript, document.head.firstElementChild);
+          </script>
         <link rel="stylesheet" href="styles/main.css">
     </head>
     <body>
         <canvas id="gameScreen" width="1500" height="800"></canvas>
-        <script src="http://74.90.215.202:9898/socket.io/socket.io.js"></script>
         <script src="/src/index.ts"></script>
     </body>
 </html>

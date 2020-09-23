@@ -1,6 +1,6 @@
 import { InputHandler } from "./InputHandler";
 import { GameObject } from "./interfaces";
-import { Menu } from "./menu";
+import { Login } from "./login";
 
 export enum GameState {
   SETTINGS,
@@ -8,21 +8,17 @@ export enum GameState {
   LOGIN
 };
 export class Game {
-  gameWidth: number;
-  gameHeight: number;
   gameState: GameState;
   gameObjects: GameObject[];
-  menu: Menu;
+  login: Login;
   inputHandler: InputHandler;
   constructor(public canvas: HTMLCanvasElement) {
-    this.gameWidth = canvas.width;
-    this.gameHeight = canvas.height;
     this.gameState = GameState.LOGIN;
     this.gameObjects = [];
-    this.menu = new Menu(this);
+    this.login = new Login(this);
     this.inputHandler = new InputHandler(this);
-    this.inputHandler.addKeyboardEventListener(this.menu.onKeyPress.bind(this.menu), GameState.LOGIN);
-    this.inputHandler.addMouseEventListener(this.menu.onMouseDown.bind(this.menu), GameState.LOGIN);
+    this.inputHandler.addKeyboardEventListener(this.login.onKeyPress.bind(this.login), GameState.LOGIN);
+    this.inputHandler.addMouseEventListener(this.login.onMouseDown.bind(this.login), GameState.LOGIN);
     this.switchGameState(GameState.LOGIN);
   }
 
@@ -42,7 +38,7 @@ export class Game {
         [...this.gameObjects].forEach(object => object.draw(ctx));
         break;
       case GameState.LOGIN:
-        this.menu.draw(ctx);
+        this.login.draw(ctx);
         break;
     }
   }

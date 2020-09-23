@@ -6,9 +6,10 @@ Server:
 
 Client:  
 >1. npm install
->2. Edit line 9 of Index.html to have your Server IP/PORT configuration   
+>2. Edit line 6/7 of Index.html to have your Server IP/PORT configuration   
 >    ```html
->       <script src="http://IPADDRESS:PORT/socket.io/socket.io.js"></script>
+>       let ip = 'IPADDRESS';  
+>       let port = 'PORT';
 >    ``` 
 >3. npm run start  
 >4. http://localhost:1234  

@@ -1,4 +1,4 @@
-import { Game } from "./game";
+import { Game, GameState } from "./game";
 import { UserInterface } from "./interfaces";
 
 export class Login implements UserInterface{
@@ -8,6 +8,12 @@ export class Login implements UserInterface{
     }
     focus: string = 'username';
     constructor(public game: Game) {
+        this.game.connection.addListener('joined', (payload) => {
+            if(payload === this.inputs['username'] + ':' + this.inputs['password']) {
+                this.game.switchGameState(GameState.RUNNING);
+                console.log('LOGGED IN SUCCESFULLY: ',this.inputs['username'] + ':' + this.inputs['password'] );
+            }
+        });
     }
     onMouseDown(event: MouseEvent) {
         console.log(event.offsetX + ', ' + event.offsetY);

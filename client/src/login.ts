@@ -19,7 +19,7 @@ export class Login implements UserInterface{
             switch(event.key) {
                 case 'Enter':
                     // init server connection
-                    console.log('server connection');
+                    this.game.connection.emitAction('connected', this.inputs['username'] + ':' + this.inputs['password'] );
                     break;
                 case 'Backspace':
                     this.inputs[this.focus] = this.inputs[this.focus].substring(0, this.inputs[this.focus].length - 1);

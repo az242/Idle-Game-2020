@@ -1,25 +1,29 @@
+import { InputHandler } from "./InputHandler";
 import { GameObject } from "./interfaces";
 import { Menu } from "./menu";
 
-const GameState = {
-  SETTINGS: 0,
-  RUNNING: 1,
-  LOGIN: 2
+export enum GameState {
+  SETTINGS,
+  RUNNING,
+  LOGIN
 };
 export class Game {
   gameWidth: number;
   gameHeight: number;
-  gameState: any;
+  gameState: GameState;
   gameObjects: GameObject[];
   menu: Menu;
-  constructor(canvas: HTMLCanvasElement) {
+  inputHandler: InputHandler;
+  constructor(public canvas: HTMLCanvasElement) {
     this.gameWidth = canvas.width;
     this.gameHeight = canvas.height;
     this.gameState = GameState.LOGIN;
     this.gameObjects = [];
     this.menu = new Menu(this);
-    document.addEventListener('keydown', (event)=>this.menu.onKeyPress(event));
-    canvas.addEventListener('mousedown', (event)=>this.menu.onMouseDown(event));
+    this.inputHandler = new InputHandler(this);
+    this.inputHandler.addKeyboardEventListener(this.menu.onKeyPress.bind(this.menu), GameState.LOGIN);
+    this.inputHandler.addMouseEventListener(this.menu.onMouseDown.bind(this.menu), GameState.LOGIN);
+    this.switchGameState(GameState.LOGIN);
   }
 
   update(deltaTime) {
@@ -32,14 +36,22 @@ export class Game {
   }
 
   draw(ctx) {
-    [...this.gameObjects].forEach(object => object.draw(ctx));
-
-    if (this.gameState === GameState.SETTINGS) {
-      //settings drawing stuff goes here
+    switch (this.gameState) {
+      case GameState.SETTINGS:
+      case GameState.RUNNING:
+        [...this.gameObjects].forEach(object => object.draw(ctx));
+        break;
+      case GameState.LOGIN:
+        this.menu.draw(ctx);
+        break;
     }
+  }
 
-    if (this.gameState === GameState.LOGIN) {
-      this.menu.draw(ctx);
-    }
+  switchGameState(newState: GameState) {
+    // call everything that needs to react on gamestate changes
+    this.inputHandler.onStateChange(newState);
+
+    // make sure gamestate in game object is updated LAST
+    this.gameState = newState;
   }
 }

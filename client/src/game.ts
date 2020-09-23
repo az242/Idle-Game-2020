@@ -1,3 +1,4 @@
+import { GameObject } from "./interfaces";
 import { Menu } from "./menu";
 
 const GameState = {
@@ -9,7 +10,7 @@ export class Game {
   gameWidth: number;
   gameHeight: number;
   gameState: any;
-  gameObjects: any[];
+  gameObjects: GameObject[];
   menu: Menu;
   constructor(canvas: HTMLCanvasElement) {
     this.gameWidth = canvas.width;
@@ -19,14 +20,6 @@ export class Game {
     this.menu = new Menu(this);
     document.addEventListener('keydown', (event)=>this.menu.onKeyPress(event));
     canvas.addEventListener('mousedown', (event)=>this.menu.onMouseDown(event));
-  }
-
-  start() {
-    if (this.gameState !== GameState.LOGIN) {
-        return;
-    }
-    this.gameObjects = [];
-    this.gameState = GameState.RUNNING;
   }
 
   update(deltaTime) {
@@ -42,26 +35,11 @@ export class Game {
     [...this.gameObjects].forEach(object => object.draw(ctx));
 
     if (this.gameState === GameState.SETTINGS) {
-      ctx.rect(0, 0, this.gameWidth, this.gameHeight);
-      ctx.fillStyle = "rgba(0,0,0,0.5)";
-      ctx.fill();
-
-      ctx.font = "30px Arial";
-      ctx.fillStyle = "white";
-      ctx.textAlign = "center";
-      ctx.fillText("Settings", this.gameWidth / 2, this.gameHeight / 2);
+      //settings drawing stuff goes here
     }
 
     if (this.gameState === GameState.LOGIN) {
       this.menu.draw(ctx);
-    }
-  }
-
-  togglePause() {
-    if (this.gameState == GameState.SETTINGS) {
-      this.gameState = GameState.RUNNING;
-    } else {
-      this.gameState = GameState.SETTINGS;
     }
   }
 }

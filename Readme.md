@@ -1,7 +1,7 @@
 How to run server/Client  
 Server:  
 >1. npm install
->2. Ensure your server port is opened in your router settings
+>2. Ensure your server port is opened in your router settings IE: Portforwarding
 >3. npm run dev
 
 Client:  

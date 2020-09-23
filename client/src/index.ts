@@ -10,10 +10,10 @@ export class Client {
     }
 }
 const canvas = <HTMLCanvasElement>document.getElementById('gameScreen');
-let ctx = canvas.getContext("2d");
+let ctx: CanvasRenderingContext2D = canvas.getContext("2d");
 let GAME_WIDTH = canvas.width;
 let GAME_HEIGHT = canvas.height;
-let game = new Game(GAME_WIDTH, GAME_HEIGHT);
+let game = new Game(canvas);
 
 let lastTime = 0;
 const client = new Client(canvas);

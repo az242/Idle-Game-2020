@@ -1,3 +1,5 @@
+import { Menu } from "./menu";
+
 const GameState = {
   SETTINGS: 0,
   RUNNING: 1,
@@ -8,11 +10,15 @@ export class Game {
   gameHeight: number;
   gameState: any;
   gameObjects: any[];
-  constructor(gameWidth, gameHeight) {
-    this.gameWidth = gameWidth;
-    this.gameHeight = gameHeight;
+  menu: Menu;
+  constructor(canvas: HTMLCanvasElement) {
+    this.gameWidth = canvas.width;
+    this.gameHeight = canvas.height;
     this.gameState = GameState.LOGIN;
     this.gameObjects = [];
+    this.menu = new Menu(this);
+    document.addEventListener('keydown', (event)=>this.menu.onKeyPress(event));
+    canvas.addEventListener('mousedown', (event)=>this.menu.onMouseDown(event));
   }
 
   start() {
@@ -47,14 +53,7 @@ export class Game {
     }
 
     if (this.gameState === GameState.LOGIN) {
-      ctx.rect(0, 0, this.gameWidth, this.gameHeight);
-      ctx.fillStyle = "rgba(0,0,0,1)";
-      ctx.fill();
-
-      ctx.font = "30px Arial";
-      ctx.fillStyle = "white";
-      ctx.textAlign = "center";
-      ctx.fillText("Login", this.gameWidth / 2, this.gameHeight / 2);
+      this.menu.draw(ctx);
     }
   }
 

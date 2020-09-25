@@ -39,6 +39,14 @@ export class Game {
       case GameState.SETTINGS:
       case GameState.RUNNING:
         [...this.gameObjects].forEach(object => object.draw(ctx));
+        // LOGIN SUCCESS REMOVE LATER
+        ctx.font = '30px Arial';
+        ctx.fillStyle = 'black';
+        ctx.textAlign = 'center';
+        ctx.fillText('Success!', this.canvas.width / 2, (this.canvas.height / 2) - (this.login.lineDimensions.height*2));
+        ctx.fillText(this.login.inputs['username'], this.canvas.width / 2, (this.canvas.height / 2) - (this.login.lineDimensions.height/2));
+        ctx.fillText(this.login.inputs['password'], this.canvas.width / 2, (this.canvas.height / 2) + (this.login.lineDimensions.height/2));
+        // LOGIN SUCCESS REMOVE LATER
         break;
       case GameState.LOGIN:
         this.login.draw(ctx);

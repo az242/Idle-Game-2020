@@ -6,6 +6,7 @@ export class Login implements UserInterface{
         username: '',
         password: ''
     };
+    errorMessage = false;
     lineDimensions = {
         height: 30,
         loginWidth: 0,
@@ -13,15 +14,19 @@ export class Login implements UserInterface{
     };
     focus: string = 'username';
     constructor(public game: Game) {
-        this.game.connection.addListener('joined', (payload) => {
-            if(payload === this.inputs['username'] + ':' + this.inputs['password']) {
+        this.game.connection.addListener('login', (payload) => {
+            if (this.compare(payload, this.inputs)) {
                 this.game.switchGameState(GameState.RUNNING);
-                console.log('LOGGED IN SUCCESFULLY: ',this.inputs['username'] + ':' + this.inputs['password'] );
+            } else if(payload === 'invalid credentials'){
+                setTimeout(() =>{ this.errorMessage = false }, 3000);
+                this.errorMessage = true;
             }
         });
     }
+    compare(a, b) {
+        return JSON.stringify(a) === JSON.stringify(b);
+    }
     onMouseDown(event: MouseEvent) {
-        console.log(event.offsetX + ', ' + event.offsetY);
         let loginLeftX = this.game.canvas.width / 2 - this.lineDimensions.loginWidth / 2;
         let loginRightX = this.game.canvas.width / 2 + this.lineDimensions.loginWidth / 2;
         let loginTopY = (this.game.canvas.height / 2) - this.lineDimensions.height;
@@ -45,13 +50,15 @@ export class Login implements UserInterface{
             switch(event.key) {
                 case 'Enter':
                     // init server connection
-                    this.game.connection.emitAction('connected', this.inputs['username'] + ':' + this.inputs['password'] );
+                    this.game.connection.emitAction('login', this.inputs);
                     break;
                 case 'Backspace':
                     this.inputs[this.focus] = this.inputs[this.focus].substring(0, this.inputs[this.focus].length - 1);
                     break;
             }
         }
+        this.lineDimensions.loginWidth = this.game.canvas.getContext('2d').measureText('Login: ' + this.inputs['username']).width;
+        this.lineDimensions.passwordWidth = this.game.canvas.getContext('2d').measureText('Password: ' + this.inputs['password']).width;
     }
     draw(ctx: CanvasRenderingContext2D) {
         ctx.rect(0, 0, this.game.canvas.width, this.game.canvas.height);
@@ -59,10 +66,13 @@ export class Login implements UserInterface{
         ctx.fill();
 
         ctx.font = '30px Arial';
-        ctx.fillStyle = 'white';
         ctx.textAlign = 'center';
-        this.lineDimensions.loginWidth = ctx.measureText('Login: ' + this.inputs['username']).width;
-        this.lineDimensions.passwordWidth = ctx.measureText('Password: ' + this.inputs['password']).width;
+
+        if (this.errorMessage) {
+            ctx.fillStyle = 'red';
+            ctx.fillText('login failure, wrong password?', this.game.canvas.width / 2, (this.game.canvas.height / 2) - (this.lineDimensions.height*2))
+        }
+        ctx.fillStyle = 'white';
         ctx.fillText('Login: ' + this.inputs['username'], this.game.canvas.width / 2, (this.game.canvas.height / 2) - (this.lineDimensions.height/2));
         ctx.fillText('Password: ' + this.inputs['password'], this.game.canvas.width / 2, (this.game.canvas.height / 2) + (this.lineDimensions.height/2));
     }

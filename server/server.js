@@ -12,8 +12,14 @@ app.use(express.static(clientPath));
 const server = http.createServer(app);
 
 const io = socketio(server);
-console.log('loaded information:', JSON.parse(fs.readFileSync('userInfo.json', 'utf8')));
-let userList = JSON.parse(fs.readFileSync('userInfo.json', 'utf8'));;
+//load user info
+let userList;
+if(fs.existsSync('userInfo.json')) {
+    userList = JSON.parse(fs.readFileSync('userInfo.json', 'utf8'));
+    console.log('loaded user info: ', userList);
+} else {
+    userList = {};
+}
 function compare(a, b) {
     return JSON.stringify(a) === JSON.stringify(b);
 }

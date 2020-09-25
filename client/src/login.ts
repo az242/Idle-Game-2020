@@ -20,6 +20,7 @@ export class Login implements UserInterface{
             } else if(payload === 'invalid credentials'){
                 setTimeout(() =>{ this.errorMessage = false }, 3000);
                 this.errorMessage = true;
+                this.inputs['password'] = '';
             }
         });
     }
@@ -70,7 +71,7 @@ export class Login implements UserInterface{
 
         if (this.errorMessage) {
             ctx.fillStyle = 'red';
-            ctx.fillText('login failure, wrong password?', this.game.canvas.width / 2, (this.game.canvas.height / 2) - (this.lineDimensions.height*2))
+            ctx.fillText('login failure', this.game.canvas.width / 2, (this.game.canvas.height / 2) - (this.lineDimensions.height*2))
         }
         ctx.fillStyle = 'white';
         ctx.fillText('Login: ' + this.inputs['username'], this.game.canvas.width / 2, (this.game.canvas.height / 2) - (this.lineDimensions.height/2));

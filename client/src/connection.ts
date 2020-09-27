@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 export class Connection {
     sock;
     constructor(ip: string, port: string) {
-        this.sock = io('http://' + ip + ':' + port);
+        this.sock = io('https://idlegame2020.hopto.org:9898');
     }
     addListener(subject: string, func: Function) {
         this.sock.on(subject, func);

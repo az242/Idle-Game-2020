@@ -14,3 +14,17 @@ Client:
 >3. npm run start  
 >4. http://localhost:1234  
 
+
+Private Key Info:
+> Country Name (2 letter code) [AU]:
+> State or Province Name (full name) [Some-State]:
+> Locality Name (eg, city) []:
+> Organization Name (eg, company) [Internet Widgits Pty Ltd]:
+> Organizational Unit Name (eg, section) []:
+> Common Name (e.g. server FQDN or YOUR name) []:
+> Email Address []:
+> 
+> Please enter the following 'extra' attributes
+> to be sent with your certificate request
+> A challenge password []:
+> An optional company name []:

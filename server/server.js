@@ -1,15 +1,22 @@
 const http = require('http');
+var https = require('https');
 const express = require('express');
 const socketio = require('socket.io');
 const fs = require('fs');
 const app = express();
+
+var options = {
+    key: fs.readFileSync('./file.pem'),
+    cert: fs.readFileSync('./file.crt')
+  };
 
 const clientPath = `${__dirname}/../client`;
 console.log(`Serving static from ${clientPath}`);
 
 app.use(express.static(clientPath));
 
-const server = http.createServer(app);
+//const server = http.createServer(app);
+const server = https.createServer(options, app);
 
 const io = socketio(server);
 //load user info
@@ -45,6 +52,10 @@ io.on('connection', (sock) => {
             console.log('Invalid Credentials for IP: ' + ip);
             sock.emit('login','invalid credentials');
         }
+    });
+    sock.on('disconnect', () => {
+        console.log('disconnected: ', ip);
+        sock.to('players').emit('disconnect', userList[ip]);
     });
 });
 server.on('error', () => {

@@ -10003,7 +10003,7 @@ var Connection = /*#__PURE__*/function () {
   function Connection(ip, port) {
     _classCallCheck(this, Connection);
 
-    this.sock = socket_io_client_1.default('https://' + ip + ':' + port);
+    this.sock = socket_io_client_1.default('http://' + ip + ':' + port);
   }
 
   _createClass(Connection, [{
@@ -10368,7 +10368,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52213" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52680" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

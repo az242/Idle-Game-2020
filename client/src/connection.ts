@@ -3,7 +3,7 @@ import io from 'socket.io-client';
 export class Connection {
     sock;
     constructor(ip: string, port: string) {
-        this.sock = io('https://' + ip + ':' + port);
+        this.sock = io('http://' + ip + ':' + port);
     }
     addListener(subject: string, func: Function) {
         this.sock.on(subject, func);

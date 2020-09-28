@@ -1,6 +1,7 @@
+import { Chat } from "./chat";
 import { Connection } from "./connection";
 import { InputHandler } from "./InputHandler";
-import { GameObject } from "./interfaces";
+import { GameObject, UserInterface } from "./interfaces";
 import { Login } from "./login";
 
 export enum GameState {
@@ -9,8 +10,10 @@ export enum GameState {
   LOGIN
 };
 export class Game {
+  user: {username: string, password: string} = {username: '', password:''};
   gameState: GameState;
   gameObjects: GameObject[];
+  uiObjects: UserInterface[];
   login: Login;
   inputHandler: InputHandler;
   connection: Connection;
@@ -20,8 +23,15 @@ export class Game {
     this.inputHandler = new InputHandler(this);
     this.connection = new Connection(ip,port);
     this.login = new Login(this);
-    this.inputHandler.addKeyboardEventListener(this.login.onKeyPress.bind(this.login), GameState.LOGIN);
-    this.inputHandler.addMouseEventListener(this.login.onMouseDown.bind(this.login), GameState.LOGIN);
+    this.uiObjects = [];
+    this.uiObjects.push(new Chat(this, 1000, 0, 500, 300));
+    this.uiObjects.push(new Login(this));
+    // this.inputHandler.addKeyboardEventListener(this.login.onKeyPress.bind(this.login), GameState.LOGIN);
+    // this.inputHandler.addMouseEventListener(this.login.onMouseDown.bind(this.login), GameState.LOGIN);
+    [...this.uiObjects].forEach(object => {
+      this.inputHandler.addKeyboardEventListener(object.onKeyPress.bind(object), object.gameState);
+      this.inputHandler.addMouseEventListener(object.onMouseDown.bind(object), object.gameState);
+    });
     this.switchGameState(GameState.LOGIN);
   }
 
@@ -38,8 +48,13 @@ export class Game {
     switch (this.gameState) {
       case GameState.SETTINGS:
       case GameState.RUNNING:
+        [...this.uiObjects].forEach(object => {
+          if(object.gameState === GameState.RUNNING)
+            object.draw(ctx)
+        });
         [...this.gameObjects].forEach(object => object.draw(ctx));
         // LOGIN SUCCESS REMOVE LATER
+        // ctx.globalAlpha = 1;
         ctx.font = '30px Arial';
         ctx.fillStyle = 'black';
         ctx.textAlign = 'center';
@@ -49,11 +64,17 @@ export class Game {
         // LOGIN SUCCESS REMOVE LATER
         break;
       case GameState.LOGIN:
-        this.login.draw(ctx);
+        [...this.uiObjects].forEach(object => {
+          if(object.gameState === GameState.LOGIN)
+            object.draw(ctx)
+        });
         break;
     }
-  }
 
+  }
+  setUser(user: {username: string, password: string}) {
+    this.user = user;
+  }
   switchGameState(newState: GameState) {
     // call everything that needs to react on gamestate changes
     this.inputHandler.onStateChange(newState);

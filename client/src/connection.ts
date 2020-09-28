@@ -10,6 +10,7 @@ export class Connection {
     }
     emitAction(subject: string, payload: any) {
         this.sock.emit(subject, payload);
+        console.log('Emitting: ' + subject, payload);
     }
 }
 

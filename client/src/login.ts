@@ -13,17 +13,22 @@ export class Login implements UserInterface{
         passwordWidth: 0
     };
     focus: string = 'username';
+    gameState: GameState = GameState.LOGIN;
     constructor(public game: Game) {
         this.game.connection.addListener('login', (payload) => {
             if (this.compare(payload, this.inputs)) {
                 this.game.switchGameState(GameState.RUNNING);
+                this.game.setUser(this.inputs);
+                console.log('login succesful');
             } else if(payload === 'invalid credentials'){
                 setTimeout(() =>{ this.errorMessage = false }, 3000);
                 this.errorMessage = true;
                 this.inputs['password'] = '';
+                console.log('login failed');
             }
         });
     }
+    
     compare(a, b) {
         return JSON.stringify(a) === JSON.stringify(b);
     }

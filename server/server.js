@@ -5,7 +5,6 @@ const socketio = require('socket.io');
 const fs = require('fs');
 const app = express();
 
-
 const clientPath = `${__dirname}/../client/dist/`;
 console.log(`Serving static from ${clientPath}`);
 
@@ -40,6 +39,7 @@ io.on('connection', (sock) => {
             fs.writeFile(`userInfo.json`, JSON.stringify(userList), ()=> {});
         } else if(compare(payload, userList[ip])) {
             //ip exists and credentials match
+            console.log('user logged in: ', payload);
             sock.to('players').emit('joined', payload);
             sock.emit('login', payload);
         } else {
@@ -47,6 +47,13 @@ io.on('connection', (sock) => {
             console.log('Invalid Credentials for IP: ' + ip);
             sock.emit('login','invalid credentials');
         }
+    });
+    sock.on('message', (payload) => {
+        console.log(payload.user + ': ' + payload.message);
+        sock.to('players').emit('message', payload);
+    });
+    sock.on('disconnect', () => {
+        //do something
     });
 });
 server.on('error', () => {
